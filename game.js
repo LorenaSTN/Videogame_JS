@@ -6,6 +6,8 @@ const btnRight = document.querySelector("#right");
 const btnDown = document.querySelector("#down");
 const livesContainer = document.querySelector("#lives");
 const timeContainer = document.querySelector("#time");
+const recordContainer = document.querySelector("#record");
+const resultContainer = document.querySelector("#result");
 
 let canvasSize;
 let elementsSize;
@@ -60,6 +62,7 @@ function startGame() {
   if (!timeStart) {
     timeStart = Date.now();
     timeInterval = setInterval(showTime, 100);
+    showRecord();
   }
   const mapRows = map.trim().split("\n");
   const mapRowCols = mapRows.map((row) => row.trim().split(""));
@@ -115,7 +118,9 @@ function movePlayer() {
   });
 
   if (grassCollision) {
-    looseLevel();
+    showBomb();
+    setTimeout(looseLevel, 200);
+    return;
   }
 
   context.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
@@ -142,17 +147,82 @@ function looseLevel() {
 
 function winGame() {
   clearInterval(timeInterval);
+
+  const timeRecord = localStorage.getItem("recordTime");
+  const playerTime = Date.now() - timeStart;
+
+  const secs = Math.floor((playerTime / 1000) % 60);
+  const mins = Math.floor((playerTime / (1000 * 60)) % 60);
+
+  const changedSeconds = String(secs).padStart(2, "0");
+  const changedMinutes = String(mins).padStart(2, "0");
+
+  const playerGoodTime = `${changedMinutes}:${changedSeconds}`;
+
+  const timeRecordNumber = Number(timeRecord);
+
+  if (timeRecordNumber) {
+    if (playerTime <= timeRecordNumber) {
+      localStorage.setItem("recordTime", playerTime);
+      resultContainer.innerHTML = `¡New Record! Time: ${playerGoodTime}`;
+    } else {
+      resultContainer.innerHTML = `Sorry, you haven't broken your record ${formatTime(
+        timeRecordNumber
+      )}`;
+    }
+  } else {
+    localStorage.setItem("recordTime", playerTime);
+    resultContainer.innerHTML = `First record: ${playerGoodTime}`;
+  }
+}
+
+function formatTime(time) {
+  const secs = Math.floor((time / 1000) % 60);
+  const mins = Math.floor((time / (1000 * 60)) % 60);
+
+  const changedSeconds = String(secs).padStart(2, "0");
+  const changedMinutes = String(mins).padStart(2, "0");
+
+  return `${changedMinutes}:${changedSeconds}`;
 }
 
 function showLives() {
   const heartsArray = Array(lives).fill(emojis["HEART"]);
 
   livesContainer.innerHTML = "";
-  heartsArray.forEach((heart) => (livesContainer.innerHTML += heart));
+  heartsArray.forEach(
+    (heart) => (livesContainer.innerHTML += " " + heart + " ")
+  );
 }
 
 function showTime() {
-  timeContainer.innerHTML = Date.now() - timeStart;
+  const elapsedTime = Date.now() - timeStart;
+
+  const seconds = Math.floor((elapsedTime / 1000) % 60);
+  const minutes = Math.floor((elapsedTime / (1000 * 60)) % 60);
+
+  const formattedSeconds = String(seconds).padStart(2, "0");
+  const formattedMinutes = String(minutes).padStart(2, "0");
+
+  timeContainer.innerHTML = `${formattedMinutes}:${formattedSeconds}`;
+}
+
+function showRecord() {
+  const recordTime = localStorage.getItem("recordTime");
+
+  if (recordTime) {
+    recordContainer.innerHTML = `${formatTime(Number(recordTime))}`;
+  } else {
+    recordContainer.innerHTML = "No hay récord registrado";
+  }
+}
+
+function showBomb() {
+  context.fillText(
+    emojis["BOMB_COLLISION"],
+    playerPosition.x,
+    playerPosition.y
+  );
 }
 
 window.addEventListener("keydown", moveByKeys);
