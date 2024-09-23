@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Videogame</title>
+    <title>Doggo's Bone Run</title>
     <link rel="stylesheet" href="./styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -13,22 +13,31 @@
     />
   </head>
   <body>
+    <!-- <div id="welcome-screen" class="welcome-screen">
+      <h1>Doggo's Bone Run</h1>
+      <button id="start-button">Start</button>
+    </div> -->
+
     <div class="game_container">
-      <canvas id="game"></canvas>
+      <section class="section_one">
+        <canvas class="game"></canvas>
+      </section>
+      <section class="section_two">
+        <div class="btns">
+          <button class="up">Up</button>
+          <button class="left">Left</button>
+          <button class="right">Right</button>
+          <button class="down">Down</button>
+        </div>
 
-      <div class="btns">
-        <button id="up">Up</button>
-        <button id="left">Left</button>
-        <button id="right">Right</button>
-        <button id="down">Down</button>
-      </div>
-
-      <div class="messages">
-        <p class="messages_p">Lives:<span id="lives"></span></p>
-        <p class="messages_p">Time: <span id="time"></span></p>
-        <p class="messages_p">Record: <span id="record"></span></p>
-        <p class="messages_p" id="result"></p>
-      </div>
+        <div class="messages">
+          <p class="messages_p">Lives:<span class="lives"></span></p>
+          <p class="messages_p">Time: <span class="time"></span></p>
+          <p class="messages_p">Record: <span class="record"></span></p>
+          <p class="messages_p" class="result"></p>
+          <button class="restart">Restart</button>
+        </div>
+      </section>
     </div>
 
     <script src="./maps.js"></script>

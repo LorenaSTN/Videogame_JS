@@ -1,13 +1,14 @@
-const canvas = document.querySelector("#game");
+const canvas = document.querySelector(".game");
 const context = canvas.getContext("2d");
-const btnUp = document.querySelector("#up");
-const btnLeft = document.querySelector("#left");
-const btnRight = document.querySelector("#right");
-const btnDown = document.querySelector("#down");
-const livesContainer = document.querySelector("#lives");
-const timeContainer = document.querySelector("#time");
-const recordContainer = document.querySelector("#record");
-const resultContainer = document.querySelector("#result");
+const btnUp = document.querySelector(".up");
+const btnLeft = document.querySelector(".left");
+const btnRight = document.querySelector(".right");
+const btnDown = document.querySelector(".down");
+const livesContainer = document.querySelector(".lives");
+const timeContainer = document.querySelector(".time");
+const recordContainer = document.querySelector(".record");
+const resultContainer = document.querySelector(".result");
+const restartButton = document.querySelector(".restart");
 
 let canvasSize;
 let elementsSize;
@@ -23,10 +24,21 @@ const playerPosition = {
   y: undefined,
 };
 
+let playerPositionProportional = {
+  x: undefined,
+  y: undefined,
+};
+
 const bonePosition = {
   x: undefined,
   y: undefined,
 };
+
+const EPSILON = 0.1;
+
+function arePositionsEqual(pos1, pos2) {
+  return Math.abs(pos1 - pos2) < EPSILON;
+}
 
 let grassPositions = [];
 
@@ -35,15 +47,25 @@ window.addEventListener("resize", setCanvasSize);
 
 function setCanvasSize() {
   if (window.innerHeight > window.innerWidth) {
-    canvasSize = window.innerWidth * 0.8;
+    canvasSize = window.innerWidth * 0.75;
   } else {
-    canvasSize = window.innerHeight * 0.8;
+    canvasSize = window.innerHeight * 0.75;
   }
+
+  canvasSize = Math.floor(canvasSize / 10) * 10;
 
   canvas.setAttribute("width", canvasSize);
   canvas.setAttribute("height", canvasSize);
 
   elementsSize = canvasSize / 10;
+
+  if (
+    playerPositionProportional.x !== undefined &&
+    playerPositionProportional.y !== undefined
+  ) {
+    playerPosition.x = playerPositionProportional.x * canvasSize;
+    playerPosition.y = playerPositionProportional.y * canvasSize;
+  }
 
   startGame();
 }
@@ -100,11 +122,15 @@ function startGame() {
   movePlayer();
 }
 
+function restartGame() {
+  location.reload();
+}
+
+restartButton.addEventListener("click", restartGame);
+
 function movePlayer() {
-  const boneCollisionX =
-    playerPosition.x.toFixed(3) == bonePosition.x.toFixed(3);
-  const boneCollisionY =
-    playerPosition.y.toFixed(3) == bonePosition.y.toFixed(3);
+  const boneCollisionX = arePositionsEqual(playerPosition.x, bonePosition.x);
+  const boneCollisionY = arePositionsEqual(playerPosition.y, bonePosition.y);
   const boneCollision = boneCollisionX && boneCollisionY;
 
   if (boneCollision) {
@@ -112,16 +138,19 @@ function movePlayer() {
   }
 
   const grassCollision = grassPositions.find((grass) => {
-    const grassCollisionX = grass.x.toFixed(3) == playerPosition.x.toFixed(3);
-    const grassCollisionY = grass.y.toFixed(3) == playerPosition.y.toFixed(3);
+    const grassCollisionX = arePositionsEqual(grass.x, playerPosition.x);
+    const grassCollisionY = arePositionsEqual(grass.y, playerPosition.y);
     return grassCollisionX && grassCollisionY;
   });
 
   if (grassCollision) {
-    showBomb();
+    collisionGrass();
     setTimeout(looseLevel, 200);
     return;
   }
+
+  playerPositionProportional.x = playerPosition.x / canvasSize;
+  playerPositionProportional.y = playerPosition.y / canvasSize;
 
   context.fillText(emojis["PLAYER"], playerPosition.x, playerPosition.y);
 }
@@ -217,12 +246,8 @@ function showRecord() {
   }
 }
 
-function showBomb() {
-  context.fillText(
-    emojis["BOMB_COLLISION"],
-    playerPosition.x,
-    playerPosition.y
-  );
+function collisionGrass() {
+  context.fillText(emojis["COLLISION"], playerPosition.x, playerPosition.y);
 }
 
 window.addEventListener("keydown", moveByKeys);
@@ -243,25 +268,32 @@ function moveUp() {
     playerPosition.y -= elementsSize;
     startGame();
   }
+  playerPositionProportional.y = playerPosition.y / canvasSize;
 }
+
 function moveLeft() {
   if (playerPosition.x - elementsSize < elementsSize) {
   } else {
     playerPosition.x -= elementsSize;
     startGame();
   }
+  playerPositionProportional.x = playerPosition.x / canvasSize;
 }
+
 function moveRight() {
   if (playerPosition.x + elementsSize > canvasSize) {
   } else {
     playerPosition.x += elementsSize;
     startGame();
   }
+  playerPositionProportional.x = playerPosition.x / canvasSize;
 }
+
 function moveDown() {
   if (playerPosition.y + elementsSize > canvasSize) {
   } else {
     playerPosition.y += elementsSize;
     startGame();
   }
+  playerPositionProportional.y = playerPosition.y / canvasSize;
 }
