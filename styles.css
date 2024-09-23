@@ -5,6 +5,7 @@ body {
   margin: 0;
   padding: 0;
   height: 100%;
+  font-family: "Pixelify Sans", sans-serif;
 }
 
 .game_container {
@@ -38,6 +39,7 @@ canvas {
   border-radius: 8px;
   background-color: rgb(255, 245, 236);
   margin: 20px 0;
+  box-shadow: 2px 2px 2px 1px rgba(82, 82, 82, 0.2);
 }
 
 .btns {
@@ -52,6 +54,7 @@ button {
   background-color: rgb(255, 245, 236);
   border-radius: 8px;
   border-color: #6c4e23;
+  box-shadow: 2px 2px 2px 1px rgba(82, 82, 82, 0.2);
   font-family: "Pixelify Sans", sans-serif;
   margin: 10px;
   padding: 5px 20px;
@@ -98,4 +101,57 @@ p {
     margin-left: 100%;
     margin-right: 100%;
   }
+}
+
+.modal {
+  display: none; /* Oculto por defecto */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7); /* Fondo oscuro semitransparente */
+}
+
+.modal-content {
+  background-color: #fff;
+  margin: 15% auto;
+  padding: 20px;
+  border: 4px solid #553405;
+  width: 80%;
+  max-width: 400px;
+  text-align: center;
+  border-radius: 8px;
+}
+
+.close-btn {
+  color: #553405;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: #ce8600;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.play-again {
+  margin-top: 15px;
+  padding: 10px 20px;
+  background-color: #e3dbd2;
+  color: #553405;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 2px 2px 2px 1px rgba(82, 82, 82, 0.2);
+}
+
+.play-again:hover {
+  background-color: #beb5ab;
+  box-shadow: 2px 2px 2px 1px rgba(82, 82, 82, 0.2);
 }

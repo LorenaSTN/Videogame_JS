@@ -10,6 +10,11 @@ const recordContainer = document.querySelector(".record");
 const resultContainer = document.querySelector(".result");
 const restartButton = document.querySelector(".restart");
 
+const modal = document.querySelector(".game-modal");
+const modalMessage = document.querySelector(".modal-message");
+const closeBtn = document.querySelector(".close-btn");
+const playAgainBtn = document.querySelector(".play-again");
+
 let canvasSize;
 let elementsSize;
 let level = 0;
@@ -164,15 +169,24 @@ function looseLevel() {
   lives--;
 
   if (lives <= 0) {
-    level = 0;
-    lives = 3;
-    timeStart = undefined;
+    modalMessage.innerHTML = "Game Over! Try again!";
+    modal.style.display = "block";
+    clearInterval(timeInterval);
+  } else {
+    playerPosition.x = undefined;
+    playerPosition.y = undefined;
+    startGame();
   }
-
-  playerPosition.x = undefined;
-  playerPosition.y = undefined;
-  startGame();
 }
+
+closeBtn.addEventListener("click", function () {
+  modal.style.display = "none";
+});
+
+playAgainBtn.addEventListener("click", function () {
+  modal.style.display = "none";
+  restartGame();
+});
 
 function winGame() {
   clearInterval(timeInterval);
@@ -193,16 +207,18 @@ function winGame() {
   if (timeRecordNumber) {
     if (playerTime <= timeRecordNumber) {
       localStorage.setItem("recordTime", playerTime);
-      resultContainer.innerHTML = `¡New Record! Time: ${playerGoodTime}`;
+      modalMessage.innerHTML = `¡New Record! Time: ${playerGoodTime}`;
     } else {
-      resultContainer.innerHTML = `Sorry, you haven't broken your record ${formatTime(
+      modalMessage.innerHTML = `You haven't broken your record: ${formatTime(
         timeRecordNumber
-      )}`;
+      )}. Time: ${playerGoodTime}`;
     }
   } else {
     localStorage.setItem("recordTime", playerTime);
-    resultContainer.innerHTML = `First record: ${playerGoodTime}`;
+    modalMessage.innerHTML = `First record: ${playerGoodTime}`;
   }
+
+  modal.style.display = "block";
 }
 
 function formatTime(time) {
