@@ -1,19 +1,19 @@
-const canvas = document.querySelector(".game");
+const canvas = document.querySelector(".game_js");
 const context = canvas.getContext("2d");
-const btnUp = document.querySelector(".up");
-const btnLeft = document.querySelector(".left");
-const btnRight = document.querySelector(".right");
-const btnDown = document.querySelector(".down");
-const livesContainer = document.querySelector(".lives");
-const timeContainer = document.querySelector(".time");
-const recordContainer = document.querySelector(".record");
-const resultContainer = document.querySelector(".result");
-const restartButton = document.querySelector(".restart");
+const btnUp = document.querySelector(".up_js");
+const btnLeft = document.querySelector(".left_js");
+const btnRight = document.querySelector(".right_js");
+const btnDown = document.querySelector(".down_js");
+const livesContainer = document.querySelector(".lives_js");
+const timeContainer = document.querySelector(".time_js");
+const recordContainer = document.querySelector(".record_js");
+const resultContainer = document.querySelector(".result_js");
+const restartButton = document.querySelector(".restart_js");
 
-const modal = document.querySelector(".game-modal");
-const modalMessage = document.querySelector(".modal-message");
-const closeBtn = document.querySelector(".close-btn");
-const playAgainBtn = document.querySelector(".play-again");
+const modal = document.querySelector(".gamemodal_js");
+const modalMessage = document.querySelector(".modalmessage_js");
+const closeBtn = document.querySelector(".closebtn_js");
+const playAgainBtn = document.querySelector(".playagain_js");
 
 let canvasSize;
 let elementsSize;
