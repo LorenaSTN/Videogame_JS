@@ -258,7 +258,7 @@ function showRecord() {
   if (recordTime) {
     recordContainer.innerHTML = `${formatTime(Number(recordTime))}`;
   } else {
-    recordContainer.innerHTML = "No hay récord registrado";
+    recordContainer.innerHTML = "No record recorded";
   }
 }
 
